@@ -1,0 +1,10 @@
+#!/usr/bin/ansisop
+begin
+variables a
+a = 2
+wait SEM1
+prints n !Global
+!Global = !Global + a
+signal SEM1
+prints n !Global
+end

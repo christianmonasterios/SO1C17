@@ -1,0 +1,7 @@
+cd src/
+
+gcc FileSystem.c archivos.c fsecundarias.c funciones.c log.c manejo_errores.c mensaje.c socket.c archivos.h estructuras.h fsecundarias.h funciones.h log.h manejo_errores.h mensaje.h socket.h -o FileSystem -lcommons -lpthread
+
+cd --
+
+echo "FileSystem compilado, ejecutar normalmente"

@@ -1,0 +1,5 @@
+#!/bin/bash
+cd src/
+gcc Consola.c escuchar_mensaje.c hilo_programa.c hilo_usuario.c log.c mensaje.c parametros.c socket_cliente.c escuchar_mensaje.h hilo_programa.h estructuras.h hilo_usuario.h log.h mensaje.h parametros.h socket_client.h -o Consola -lcommons -lpthread
+
+echo "Consola compilada, ejecutar normalmente"

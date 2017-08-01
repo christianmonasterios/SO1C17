@@ -1,0 +1,7 @@
+cd src/
+
+gcc Memoria.c consola_memoria.c gestionar_procesos.c hash.c log.c manejo_errores.c mensaje.c socket.c consola_memoria.h estructuras.h gestionar_procesos.h hash.h log.h manejo_errores.h mensaje.h socket.h -o Memoria -lcommons -lpthread
+
+cd --
+
+echo "Memoria compilada, ejecutar normalmente"

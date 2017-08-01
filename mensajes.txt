@@ -1,0 +1,88 @@
+Estructura de mensajes (Paquetes estandar de 1024 bytes)
+H + YY + LLLLLLLLLL + XXXXXXXXXXXXXXXXXXXXXXXX
+
+H: Identificador del emisor 		(1 bytes)
+Y: Identificador del mensaje 		(2 bytes)
+L: Longitud del mensaje a enviar (10 bytes)
+X: Texto del mensaje a enviar 	(1011 bytes) - en caso de vacio debe ser caracter nulo
+							TOTAL =	1024 bytes
+
+------- DICCIONARIO DE MENSAJES -------
+KERNEL - K
+K00: Mensaje para pedir identificarse al recien conectado
+K01: Mensaje para pedir datos (vale para cualquiera)
+K02: Identificarse a Memoria
+K03: Identificarse a FileSystem
+K04: Mensaje para informar que se puede iniciar el programa
+K05: Mensaje para informar que NO se puede iniciar el programa
+K06: Mensaje a memoria para saber si se puede guardar un codigo
+K07: Mensaje con PCB para la CPU
+K08:Kernel no entendio el mensaje recibido
+K09:Mensaje para que el programa imprima por pantalla
+K10: Mensaje para indicar que finalice un programa
+K11:Mensaje para pedir abrir archivo
+K12:Mensaje para crear archivo
+K13:Mensaje para borrar 
+K14:Mensaje para leer
+K15:Mensaje para escribir
+K16:Mensaje para enviar FD a CPU
+K17:Mensaje para enviar pid, páginas para código y páginas para stack ->K17|PID|PAGCOD| K17|0000|0000|0000
+K18: ENVIAR VALOR VARIABLE COMPARTIDA A CPU : K|18|0025| (EMISOR-CODIGO-4BYTES VALOR INT DE LA VARIABLE COMPARTIDA)(RESPUESTA A UN P09)
+K19: K19|PID|CANTPAGHEAP ->K19|0000|0000
+K20:Mensaje para enviar código a la Memoria
+K21:Mensaje para enviar error a CPU
+K23:Mensaje para bloquear proceso, esperar pcb
+K25:Finalizar un PROCESO. K|25|XXXX|  XXXX = PID Ej: K250001 (Eliminamos el PID 1)
+
+
+CPU - P
+P00: me presento al mundo como una CPU
+P01: Pedir bytes de una página a Memoria
+P02|0000000016|0004|HOLA|3|w|r|c
+P03 MOVER CURSOR
+P04 LEER
+P05 ESCRIBIR  P05|10size|4fd|info
+P06 CERRAR
+P07 BORRAR
+P08 ASIGNAR BYTES EN MEMORIA
+P09 PEDIR VALOR VARIABLE COMPARTIDA A KERNEL: P|09|0000000018|"variablecompartida"
+P10  ASIGNAR VALOR VARIABLE COMPARTIDA KERNEL: P|10|0000000018|"variablecompartida"|0025 
+P11 Imprimir P11|0000000008|"imprimir"
+P12 Finalización por quantum 
+P13 Finalización del proceso por el buen camino o por error
+P14 Wait
+P15 Signal
+P16 DEVOLVER PCB POR BLOQUEO
+P17 ALLOCAR MEMORIA DINAMICA P17|000000005|25000 (emisor P - codigo 17 - 10 bytes largo siguiente - numero de alloc que se esta haciendo)-> respuesta: K##|0000000002|20 (offset de esa peticion de heap) ó K21|0000000000|0003 codigo de error 
+P18 LIBERAR MEMORIA DE HEAP P18|0000000002|20 (emisor P - codigo 17 - 10 bytes largo siguiente - offset de donde se ubica la porcion que quiero liberar) -> respuesta OK o no?
+P19 avisar a kernel que me voy, y que espere que le devuelvo el pcb
+P20 pcb para agregar a la cola de listos?
+
+MEMORIA - M
+M00: Respuesta a la solicitud de datos (Kernel) de tamaño de página. Va en el HandShake. Rta Ej: M|00|0128|
+M01: Respuesta de la memoria a cualquier Cliente (K o P), indica que NO PUEDE responder el pedido.
+M02: Respuesta de la memoria a K, indica que PUDO guardar el codigo.
+M03: Respuesta de la memoria a K, indica que NO PUDO guardar el codigo.
+M08: Respuesta de la memoria a K y C luego de un SOLICITAR BYTES, M|08|CANT|BUFFER
+
+CONSOLA - C
+C00: Identificarse como consola
+C01: Peticion de inicio de programa 
+C02: Aviso de finalizacion de programa
+C03: Aviso de desconexion de consola
+
+FILESYSTEM - F
+F00: handshake
+F01: validar archivo (ok o no)
+F02: crear archivo (ok o no)
+F03: borrar archivo 
+F04: leer archivo (con la lectura)
+F05: guardar en archivo
+F06:error de lectura
+
+------- Mensajes -------
+C01(tamaño del archivo)(texto del archivo)
+
+Errores customizados
+-10: Se ha forzado la finalizacion desde consola kernel
+-11: El semaforo no existe

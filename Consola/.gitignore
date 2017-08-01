@@ -1,0 +1,5 @@
+/Debug/
+*.dSYM/
+*.su
+*.d
+*.mk

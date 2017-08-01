@@ -1,0 +1,10 @@
+		case 19:;
+			char *mensaje_pcb = recibir(socket_,&controlador);
+			char *cod_pcb = get_codigo(mensaje_pcb);
+			if(atoi(cod_pcb)==20){
+				char *pcb_serializado = get_mensaje_pcb(mensaje_pcb);
+				t_PCB* pcb = deserializarPCB_CPUKer(pcb_serializado);
+			}
+			// Agregar PCB a cola correspondiente
+			// Desconectar CPU;
+			break;
